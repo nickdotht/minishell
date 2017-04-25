@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/21 21:30:24 by jrameau           #+#    #+#             */
-/*   Updated: 2017/04/19 22:53:17 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/04/24 19:08:03 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 # include <string.h>
 # include <unistd.h>
 # include <stdlib.h>
+
+# define BUFF_SIZE 100
+# define MALLCHECK(x) if (!x) return (-1);
 
 void				ft_putchar(char c);
 void				ft_putstr(char const *str);
@@ -115,5 +118,6 @@ int					ft_intlen(int num);
 int					ft_strendswith(char *s1, char *s2);
 char				*ft_pathjoin(char *p1, char *p2);
 void				ft_lstaddback(t_list **alst, t_list *new);
+int				get_next_line(const int fd, char **line);
 
 #endif

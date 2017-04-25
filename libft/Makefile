@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jrameau <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: jrameau <jrameau@student.42.us.org>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/21 14:58:27 by jrameau           #+#    #+#              #
-#    Updated: 2016/09/25 19:32:38 by jrameau          ###   ########.fr        #
+#    Updated: 2017/04/24 19:07:57 by jrameau          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= libft.a
 CFLAGS	= -Wall -Werror -Wextra -Iincludes -c
-FILES		= $(shell ls | grep -E "ft_.+\.c")
+FILES		= $(shell ls | grep -E ".+\.c")
 OBJ			= $(FILES:%.c=%.o)
 
 all: $(NAME)
