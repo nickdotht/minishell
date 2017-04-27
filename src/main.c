@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 04:17:47 by jrameau           #+#    #+#             */
-/*   Updated: 2017/04/26 06:16:43 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/04/26 19:11:23 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,16 @@ int	main(int ac, char **av, char **envv) {
 	char **command;
 	int ret;
 
-	display_prompt(envv);
-	get_next_line(0, &input);
-	command = ft_strsplit(input, ' ');
-	ret = exec_command(command, envv);
-	// while (1)
-	// {
-	// 	if (ret == -1)
-	// 		break ;
-	// }
+	while (1)
+	{
+		display_prompt(envv);
+		get_next_line(0, &input);
+		if (input[0] == '\0')
+			continue ;
+		command = ft_strsplit(input, ' ');
+		ret = exec_command(command, envv);
+		if (ret == -1)
+			break ;
+	}
 	exit(0);
 }
