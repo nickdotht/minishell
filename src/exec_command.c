@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 05:44:00 by jrameau           #+#    #+#             */
-/*   Updated: 2017/04/26 20:00:16 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/04/29 13:23:08 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,16 @@ int exec_command(char **command, char **envv) {
 	struct stat f;
 
 	get_path(envv, &path);
+	if (check_builtins(command)) {
+		return (0);
+	}
 	int i = -1;
 	while (path[++i]) {
-		bin_path = ft_pathjoin(path[i], command[0]);
+		if (command[0][0] == '/') {
+			bin_path = ft_strdup(command[0]);
+		} else {
+			bin_path = ft_pathjoin(path[i], command[0]);
+		}
 		if (lstat(bin_path, &f) == -1) {
 			free(bin_path);
 		} else {
