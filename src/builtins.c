@@ -3,20 +3,21 @@
 void echo_builtin(char **command)
 {
 	int i;
-	// int len;
+	int len;
 
 	i = -1;
 	while (command[++i]) {
-		printf("HMM%sHMM\n", command[i]);
-		// len = ft_strlen(command[i]);
-		// if (command[0][0] == '"')
-		// 	ft_putstr(command[i] + 1);
-		// else if (command[i][len - 1] == '"')
-		// 	ft_putnstr(command[i], len - 1);
-		// else
-		// 	ft_putstr(command[i]);
-		// if (command[i + 1])
-		// 	ft_putchar(' ');
+		len = ft_strlen(command[i]);
+		if (command[i][0] == '"' && command[i][len - 1] == '"')
+			ft_putnstr(command[i] + 1, len - 1);
+		else if (command[i][0] == '"')
+			ft_putstr(command[i] + 1);
+		else if (command[i][len - 1] == '"')
+			ft_putnstr(command[i], len - 1);
+		else
+			ft_putstr(command[i]);
+		if (command[i + 1])
+			ft_putchar(' ');
 	}
 	ft_putchar('\n');
 }
