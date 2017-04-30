@@ -22,8 +22,47 @@ void echo_builtin(char **command)
 	ft_putchar('\n');
 }
 
-int check_builtins(char **command)
+int count_args(char *str)
 {
+	int i;
+	int count;
+
+	i = -1;
+	count  = 0;
+	while (str[++i]) {
+		while (str[i] == ' ')
+			i++;
+		count++;
+		if (str[i++] == '"') {
+			while (str[i] != '"')
+				i++;
+		} else {
+			while (str[i] != ' ')
+				i++;
+		}
+	}
+	return (count);
+}
+
+// char **split_args(char *input)
+// {
+// 	int i = -1;
+// 	char **res;
+
+// 	res = (char **)ft_memalloc(sizeof(char) * count_args(input));
+// 	while (input[++i])
+// 	{
+// 		while 
+// 	}
+// }
+
+int check_builtins(char *input)
+{
+	char **command;
+
+	// command = split_args(input);
+	printf("Num args: %d\n", count_args(input));
+	exit(0);
 	if (ft_strequ(command[0], "exit")) {
 		// Clean stuff here first (memory leaks)
 		exit(0);

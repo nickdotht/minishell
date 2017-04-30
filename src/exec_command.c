@@ -37,15 +37,17 @@ int run_cmd(char *path, char **args, char **envv) {
 	return (0);
 }
 
-int exec_command(char **command, char **envv) {
+int exec_command(char *input, char **envv) {
 	char **path;
 	char *bin_path;
 	struct stat f;
+	char **command;
 
 	get_path(envv, &path);
-	if (check_builtins(command)) {
+	if (check_builtins(input)) {
 		return (0);
 	}
+	command = ft_strsplit(input, ' ');
 	int i = -1;
 	while (path[++i]) {
 		if (command[0][0] == '/') {

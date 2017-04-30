@@ -29,6 +29,6 @@ typedef struct			s_bin_files
 }				t_bin_files;
 
 void display_prompt(char **envv);
-int exec_command(char **command, char **envv);
-int check_builtins(char **command);
+int exec_command(char *input, char **envv);
+int check_builtins(char *input);
 #endif

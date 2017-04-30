@@ -25,8 +25,7 @@ int	main(int ac, char **av, char **envv) {
 		get_next_line(0, &input);
 		if (input[0] == '\0')
 			continue ;
-		command = ft_strsplit(input, ' ');
-		ret = exec_command(command, envv);
+		ret = exec_command(input, envv);
 		if (ret == -1)
 			break ;
 	}
