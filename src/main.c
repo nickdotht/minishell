@@ -6,11 +6,34 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 04:17:47 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/06 19:52:30 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/07 18:38:27 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int		envv_len(char **envv)
+{
+	int		i;
+	int		count;
+
+	i = -1;
+	count = 0;
+	while (envv[++i])
+		count++;
+	return (count);
+}
+
+void	init_env(char **envv)
+{
+	int		i;
+
+	i = -1;
+	g_envv = ft_realloc(g_envv, 0, envv_len(envv) + 1);
+	while (envv[++i])
+		g_envv[i] = ft_strdup(envv[i]);
+	g_envv[i] = NULL;
+}
 
 int	main(int ac, char **av, char **envv) {
 	(void)ac;
@@ -18,13 +41,14 @@ int	main(int ac, char **av, char **envv) {
 	char *input;
 	int ret;
 
+	init_env(envv);
 	while (1)
 	{
-		display_prompt(envv);
+		display_prompt();
 		get_next_line(0, &input);
 		if (input[0] == '\0')
 			continue ;
-		ret = exec_command(input, envv);
+		ret = exec_command(input);
 		if (ret == -1)
 			break ;
 	}

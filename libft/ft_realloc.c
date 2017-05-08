@@ -3,31 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrameau <jrameau@student.42.us.org>        +#+  +:+       +#+        */
+/*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/10/21 01:11:53 by jrameau           #+#    #+#             */
-/*   Updated: 2017/04/24 20:46:22 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/07 18:27:33 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void			*ft_realloc(void *ptr, size_t size)
+void	*ft_realloc(void *ptr, size_t prev_size, size_t new_size)
 {
-	char *new;
+	void	*new;
+	int		min_size;
 
-	if (!size && ptr)
-	{
-		if (!(new = (char*)malloc(1)))
-			return (NULL);
-		ft_memdel(&ptr);
-		return (new);
-	}
-	new = (char*)malloc(size);
-	if (ptr)
-	{
-		ft_memcpy(new, ptr, size);
-		ft_memdel(&ptr);
-	}
+	if (!ptr)
+		return (NULL);
+	new = ft_memalloc(new_size);
+	min_size = prev_size < new_size ? prev_size : new_size;
+	ft_memcpy(new, ptr, min_size);
+	free(ptr);
 	return (new);
 }

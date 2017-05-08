@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jrameau <jrameau@student.42.us.org>        +#+  +:+       +#+        */
+/*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/21 21:30:24 by jrameau           #+#    #+#             */
-/*   Updated: 2017/04/29 13:59:10 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/07 18:27:11 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int					ft_countwords(char const *str, char c);
 char				*ft_strndup(const char *s1, size_t n);
 char				*ft_capitalize(char *s);
 t_list				*ft_lst_reverse(t_list *alst);
-void				*ft_realloc(void *ptr, size_t size);
+void				*ft_realloc(void *ptr, size_t prev_size, size_t new_size);
 char				*ft_strjoinch(char const *s1, char c);
 char				*ft_strnchr(char *s, char c, int offset);
 int					ft_copyuntil(char **dst, char *src, char c);

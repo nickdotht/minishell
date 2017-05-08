@@ -1,30 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnstr.c                                       :+:      :+:    :+:   */
+/*   cd_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/29 13:50:34 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/07 15:02:25 by jrameau          ###   ########.fr       */
+/*   Created: 2017/05/07 15:56:23 by jrameau           #+#    #+#             */
+/*   Updated: 2017/05/07 16:52:07 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void ft_putnstr(char *str, int n)
-{
-	int i;
-
-	i = -1;
-	if (n < 0)
-	{
-		while (str[++i] && i < (int)ft_strlen(str) + n)
-			ft_putchar(str[i]);	
-	}
-	else
-	{
-		while (str[++i] && i < n)
-			ft_putchar(str[i]);
-	}
-}
+// void	cd_builtin(char **command)
+// {
+// 		if (!command[0])
+// 		{
+// 			return ((void)chdir("~"));
+// 		}
+// }
