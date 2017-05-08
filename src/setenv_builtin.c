@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:16:55 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/08 13:24:35 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/08 16:24:01 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ char	**realloc_envv(int new_size)
 	new = (char **)ft_memalloc(sizeof(char *) * (new_size + 1));
 	i = -1;
 	while (g_envv[++i] && i < new_size)
+	{
 		new[i] = ft_strdup(g_envv[i]);
+		free(g_envv[i]);
+	}
 	free(g_envv);
 	return (new);
 }
@@ -68,6 +71,8 @@ void    setenv_builtin(char **command)
 	i = -1;
 	if (!command[0])
 		return (print_env());
+	if (command[2])
+		return (ft_putendl("setenv: Too many arguments."));
 	pos = find_env_var(command[0]);
 	if (g_envv[pos])
 	{
