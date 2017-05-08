@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 17:40:04 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/08 13:22:48 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/08 16:26:03 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,8 @@ void					echo_builtin(char **command);
 void					cd_builtin(char **command);
 void					setenv_builtin(char **command);
 char					*get_env_var(char *var);
+void				    unsetenv_builtin(char **command);
+int						envv_len(char **envv);
+int						find_env_var(char *var);
+char					**realloc_envv(int new_size);
 #endif
