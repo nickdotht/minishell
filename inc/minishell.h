@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 17:40:04 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/08 16:26:03 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/08 16:46:35 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,6 @@
 # define IS_QUOTE(x) (x == '"' || x == '\'')
 
 char **g_envv;
-
-typedef struct			s_bin_files
-{
-	char				*name;
-	struct s_bin_files	*next;
-}						t_bin_files;
 
 void					display_prompt(void);
 int						exec_command(char *input);

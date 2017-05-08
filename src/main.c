@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 04:17:47 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/08 13:26:26 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/08 16:49:21 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ int	main(int ac, char **av, char **envv) {
 		if (input[0] == '\0')
 			continue ;
 		ret = exec_command(input);
+		free(input);
+		input = NULL;
 		if (ret == -1)
 			break ;
 	}
