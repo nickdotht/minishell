@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 05:44:00 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/08 13:22:06 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/08 16:06:18 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ int		run_cmd(char *path, char **args)
 
 	 pid = fork();
 	 if (pid == 0)
-	 {
 		execve(path, args, g_envv);
-	 }
 	 else if (pid < 0)
 	 {
 		 ft_putendl("Fork failed to create a new process.");
@@ -65,6 +63,11 @@ int		check_builtins(char *input)
 	else if (ft_strequ(command[0], "setenv"))
 	{
 		setenv_builtin(command + 1);
+		return (1);
+	}
+	else if (ft_strequ(command[0], "unsetenv"))
+	{
+		unsetenv_builtin(command + 1);
 		return (1);
 	}
 	return (0);
