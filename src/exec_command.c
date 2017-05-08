@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 05:44:00 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/07 17:16:10 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/08 13:22:06 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int		check_builtins(char *input)
 	}
 	else if (ft_strequ(command[0], "setenv"))
 	{
-		ft_setenv(command + 1);
+		setenv_builtin(command + 1);
 		return (1);
 	}
 	return (0);

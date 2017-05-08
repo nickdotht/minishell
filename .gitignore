@@ -35,4 +35,5 @@
 *DS_Store
 minishell
 *.nfs
+launch.json
 *test*

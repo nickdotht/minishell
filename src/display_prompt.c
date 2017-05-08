@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 04:49:25 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/07 16:58:48 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/08 12:27:45 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ char *get_home_path(void)
 	int i;
 
 	i = -1;
-	while (g_envv[++i]) {
-		if (ft_strstartswith(g_envv[i], "HOME")) {
+	while (g_envv[++i])
+	{
+		if (ft_strstartswith(g_envv[i], "HOME"))
 			return g_envv[i] + 5;
-		}
 	}
 	return (NULL);
 }
@@ -38,8 +38,9 @@ void display_prompt(void)
 		ft_putstr("~");
 		ft_putstr(cwd + ft_strlen(home_path));
 	}
-	else
+	else {
 		ft_putstr(cwd);
+	}
 	ft_putstr(" \033[31m︻\033[0m\033[32m┳\033[0m\033[33mデ");
 	ft_putstr("\033[0m\033[34m═\033[0m\033[35m—\033[0m$ ");
 }

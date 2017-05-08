@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 17:40:04 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/07 18:25:46 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/08 13:22:48 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ void					display_prompt(void);
 int						exec_command(char *input);
 void					echo_builtin(char **command);
 void					cd_builtin(char **command);
-void					ft_setenv(char **command);
+void					setenv_builtin(char **command);
+char					*get_env_var(char *var);
 #endif

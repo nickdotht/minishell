@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 04:17:47 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/07 18:38:27 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/08 13:26:26 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,15 @@ void	init_env(char **envv)
 {
 	int		i;
 
+	if (!envv)
+		return ;
+	g_envv = (char **)ft_memalloc(sizeof(char *) * (envv_len(envv) + 1));
 	i = -1;
-	g_envv = ft_realloc(g_envv, 0, envv_len(envv) + 1);
 	while (envv[++i])
-		g_envv[i] = ft_strdup(envv[i]);
-	g_envv[i] = NULL;
+	{
+		if (!(g_envv[i] = ft_strdup(envv[i])))
+			exit(1);
+	}
 }
 
 int	main(int ac, char **av, char **envv) {
