@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 04:17:47 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/08 16:49:21 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/08 17:01:57 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,23 @@ void	init_env(char **envv)
 	}
 }
 
+void	free_command(char **command)
+{
+	int		i;
+
+	i = -1;
+	while (command[++i])
+		free(command[i]);
+	free(command);
+	command = NULL;
+}
+
 int	main(int ac, char **av, char **envv) {
 	(void)ac;
 	(void)av;
-	char *input;
-	int ret;
+	char	*input;
+	int		ret;
+	char	**command;
 
 	init_env(envv);
 	while (1)
@@ -52,9 +64,11 @@ int	main(int ac, char **av, char **envv) {
 		get_next_line(0, &input);
 		if (input[0] == '\0')
 			continue ;
-		ret = exec_command(input);
+		command = ft_strsplit(input, ' ');
 		free(input);
 		input = NULL;
+		ret = exec_command(command);
+		free_command(command);
 		if (ret == -1)
 			break ;
 	}

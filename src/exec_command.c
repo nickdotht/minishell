@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 05:44:00 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/08 16:06:18 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/08 17:07:29 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,8 @@ int		run_cmd(char *path, char **args)
 	return (0);
 }
 
-int		check_builtins(char *input)
+int		check_builtins(char **command)
 {
-	char	**command;
-
-	command = ft_strsplit(input, ' ');
 	if (ft_strequ(command[0], "exit"))
 	{
 		// Clean stuff here first (memory leaks)
@@ -57,7 +54,7 @@ int		check_builtins(char *input)
 	}
 	else if (ft_strequ(command[0], "cd"))
 	{
-		// cd_builtin(command + 1);
+		cd_builtin(command + 1);
 		return (1);
 	}
 	else if (ft_strequ(command[0], "setenv"))
@@ -73,17 +70,25 @@ int		check_builtins(char *input)
 	return (0);
 }
 
-int		exec_command(char *input)
+void	clean_path(char **path)
+{
+	int		i;
+
+	i = -1;
+	while (path[++i])
+		free(path[i]);
+	free(path);
+}
+
+int		exec_command(char **command)
 {
 	char		**path;
 	char		*bin_path;
 	struct stat	f;
-	char		**command;
 
 	get_path(&path);
-	if (check_builtins(input))
+	if (check_builtins(command))
 		return (0);
-	command = ft_strsplit(input, ' ');
 	int i = -1;
 	while (path[++i])
 	{
@@ -97,6 +102,7 @@ int		exec_command(char *input)
 			if ((f.st_mode & S_IFMT) == S_IFREG)
 				return (run_cmd(bin_path, command));
 	}
+	clean_path(path);
 	ft_putstr("minishell: command not found: ");
 	ft_putendl(command[0]);
 	return (0);

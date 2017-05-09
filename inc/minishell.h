@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 17:40:04 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/08 16:46:35 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/08 17:07:50 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 char **g_envv;
 
 void					display_prompt(void);
-int						exec_command(char *input);
+int						exec_command(char **command);
 void					echo_builtin(char **command);
 void					cd_builtin(char **command);
 void					setenv_builtin(char **command);
