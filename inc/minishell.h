@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 17:40:04 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/09 19:44:49 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/09 22:05:11 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 # define IS_QUOTE(x) (x == '"' || x == '\'')
 
-char **g_envv;
+char					**g_envv;
 
 void					display_prompt(void);
 int						exec_command(char **command);
@@ -38,4 +38,5 @@ int						envv_len(char **envv);
 int						find_env_var(char *var);
 char					**realloc_envv(int new_size);
 void                	set_env_var(char *key, char *value);
+void					print_env(void);
 #endif

@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 05:44:00 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/08 17:07:29 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/09 21:55:23 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ int		check_builtins(char **command)
 	else if (ft_strequ(command[0], "unsetenv"))
 	{
 		unsetenv_builtin(command + 1);
+		return (1);
+	}
+	else if (ft_strequ(command[0], "env"))
+	{
+		print_env();
 		return (1);
 	}
 	return (0);
