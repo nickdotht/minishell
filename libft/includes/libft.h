@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/21 21:30:24 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/07 18:27:11 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/09 20:20:11 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,5 +120,5 @@ char				*ft_pathjoin(char *p1, char *p2);
 void				ft_lstaddback(t_list **alst, t_list *new);
 int				get_next_line(const int fd, char **line);
 void				ft_putnstr(char *str, int n);
-
+char				*ft_strreplace(char *str, char *term, char *replace_by);
 #endif

@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:16:55 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/08 16:24:01 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/09 18:29:30 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,30 +63,36 @@ char	**realloc_envv(int new_size)
 	return (new);
 }
 
+void	set_env_var(char *key, char *value)
+{
+	int		pos;
+
+	pos = find_env_var(key);
+	if (g_envv[pos])
+	{
+		if (value)
+			g_envv[pos] = ft_strjoin(key, ft_strjoin("=", value));
+		else
+			g_envv[pos] = ft_strjoin(key, "=");
+	}
+	else
+	{
+		g_envv = realloc_envv(pos + 1);
+		if (value)
+			g_envv[pos] = ft_strjoin(key, ft_strjoin("=", value));
+		else
+			g_envv[pos] = ft_strjoin(key, "=");
+	}
+}
+
 void    setenv_builtin(char **command)
 {
 	int     i;
-	int     pos;
 
 	i = -1;
 	if (!command[0])
 		return (print_env());
 	if (command[2])
 		return (ft_putendl("setenv: Too many arguments."));
-	pos = find_env_var(command[0]);
-	if (g_envv[pos])
-	{
-		if (command[1])
-			g_envv[pos] = ft_strjoin(command[0], ft_strjoin("=", command[1]));
-		else
-			g_envv[pos] = ft_strjoin(command[0], "=");
-	}
-	else
-	{
-		g_envv = realloc_envv(pos + 1);
-		if (command[1])
-			g_envv[pos] = ft_strjoin(command[0], ft_strjoin("=", command[1]));
-		else
-			g_envv[pos] = ft_strjoin(command[0], "="); 
-	}
+	set_env_var(command[0], command[1]);
 }

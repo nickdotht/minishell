@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 17:40:04 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/08 17:07:50 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/09 19:44:49 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <signal.h>
 # include <dirent.h>
+# include <errno.h>
 # include "libft.h"
 
 # define IS_QUOTE(x) (x == '"' || x == '\'')
@@ -36,4 +37,5 @@ void				    unsetenv_builtin(char **command);
 int						envv_len(char **envv);
 int						find_env_var(char *var);
 char					**realloc_envv(int new_size);
+void                	set_env_var(char *key, char *value);
 #endif
