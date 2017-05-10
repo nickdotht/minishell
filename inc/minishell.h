@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 17:40:04 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/09 22:05:11 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/10 11:54:11 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,6 @@ int						find_env_var(char *var);
 char					**realloc_envv(int new_size);
 void                	set_env_var(char *key, char *value);
 void					print_env(void);
+void					change_dir(char *path, int print_path);
+char					*parse_home_path(char *path, int reverse_parse);
 #endif

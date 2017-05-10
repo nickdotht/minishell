@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 05:44:00 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/09 21:55:23 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/10 11:43:50 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int		exec_command(char **command)
 	char		**path;
 	char		*bin_path;
 	struct stat	f;
+	char		*parsed_home;
 
 	get_path(&path);
 	if (check_builtins(command))
@@ -97,7 +98,7 @@ int		exec_command(char **command)
 	int i = -1;
 	while (path[++i])
 	{
-		if (command[0][0] == '/')
+		if (ft_strstartswith(command[0], path[i]))
 			bin_path = ft_strdup(command[0]);
 		else
 			bin_path = ft_pathjoin(path[i], command[0]);
@@ -106,6 +107,17 @@ int		exec_command(char **command)
 		else
 			if ((f.st_mode & S_IFMT) == S_IFREG)
 				return (run_cmd(bin_path, command));
+	}
+	parsed_home = parse_home_path(command[0], 1);
+	if (lstat(parsed_home, &f) != -1)
+	{
+		if ((f.st_mode & S_IFMT) == S_IFDIR)
+		{
+			change_dir(parsed_home, 0);
+			if (!ft_strequ(parsed_home, command[0]))
+				free(parsed_home);
+			return (0);
+		}
 	}
 	clean_path(path);
 	ft_putstr("minishell: command not found: ");
