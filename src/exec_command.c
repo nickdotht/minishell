@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 05:44:00 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/10 11:43:50 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/11 03:05:57 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,21 @@ void	get_path(char ***path)
 	while (g_envv[++i])
 	{
 		if (ft_strstartswith(g_envv[i], "PATH"))
+		{
 			*path = ft_strsplit(g_envv[i] + 5, ':');
+			return ;
+		}
 	}
+	*path = NULL;
 }
 
-int		run_cmd(char *path, char **args)
+int		run_cmd(char *path, char **args, int has_mem)
 {
 	 pid_t	pid;
 
 	 pid = fork();
-	 if (pid == 0)
+	 signal(SIGINT, proc_signal_handler);
+	if (pid == 0)
 		execve(path, args, g_envv);
 	 else if (pid < 0)
 	 {
@@ -35,7 +40,7 @@ int		run_cmd(char *path, char **args)
 		 return (-1);
 	 }
 	wait(&pid);
-	if (path)
+	if (path && has_mem)
 		free(path);
 	return (0);
 }
@@ -96,7 +101,7 @@ int		exec_command(char **command)
 	if (check_builtins(command))
 		return (0);
 	int i = -1;
-	while (path[++i])
+	while (path && path[++i])
 	{
 		if (ft_strstartswith(command[0], path[i]))
 			bin_path = ft_strdup(command[0]);
@@ -105,21 +110,33 @@ int		exec_command(char **command)
 		if (lstat(bin_path, &f) == -1)
 			free(bin_path);
 		else
-			if ((f.st_mode & S_IFMT) == S_IFREG)
-				return (run_cmd(bin_path, command));
+			if (f.st_mode & S_IFREG)
+			{
+				if (f.st_mode & S_IXUSR)
+					return (run_cmd(bin_path, command, 1));
+				else
+				{
+					ft_putstr("minishell: permission denied: ");
+					ft_putendl(bin_path);
+					return (0);
+				}
+			}
 	}
 	parsed_home = parse_home_path(command[0], 1);
 	if (lstat(parsed_home, &f) != -1)
 	{
-		if ((f.st_mode & S_IFMT) == S_IFDIR)
+		if (f.st_mode & S_IFDIR)
 		{
 			change_dir(parsed_home, 0);
 			if (!ft_strequ(parsed_home, command[0]))
 				free(parsed_home);
 			return (0);
 		}
+		else if (f.st_mode & S_IXUSR)
+			return (run_cmd(parsed_home, command, 0));
 	}
-	clean_path(path);
+	if (path)
+		clean_path(path);
 	ft_putstr("minishell: command not found: ");
 	ft_putendl(command[0]);
 	return (0);

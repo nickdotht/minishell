@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 04:17:47 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/08 17:01:57 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/11 02:46:34 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,17 @@ int	main(int ac, char **av, char **envv) {
 	(void)av;
 	char	*input;
 	int		ret;
-	char	**command;
+	char **command;
 
 	init_env(envv);
 	while (1)
 	{
 		display_prompt();
+		signal(SIGINT, signal_handler);
 		get_next_line(0, &input);
-		if (input[0] == '\0')
+		if (ft_isemptystr(input, 1))
 			continue ;
-		command = ft_strsplit(input, ' ');
+		command = ft_strsplitall(input);
 		free(input);
 		input = NULL;
 		ret = exec_command(command);
