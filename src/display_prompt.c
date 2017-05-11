@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 04:49:25 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/10 11:56:43 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/10 17:54:47 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,17 @@ char	*parse_home_path(char *path, int reverse_parse)
 	if (!ft_strstartswith(path, compare))
 		return (path);
 	if (reverse_parse)
+	{
 		new = ft_pathjoin(home_path, path + 1);
+		free(compare);
+	}
 	else
-		new = ft_pathjoin("~", path + ft_strlen(home_path));
-	// free(compare);
+	{
+		if (*(path + ft_strlen(home_path)) == '\0')
+			new = ft_strdup("~");
+		else
+			new = ft_pathjoin("~", path + ft_strlen(home_path));
+	}
 	return (new);
 }
 

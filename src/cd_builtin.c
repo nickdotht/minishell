@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 15:56:23 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/10 11:06:00 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/10 17:56:35 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 void	print_pth(char *path)
 {
-	char	*home_path;
+	char	*parsed_home;
 
-	home_path = get_env_var("HOME");
-	if (ft_strstartswith(path, home_path))
-		ft_putstr(ft_pathjoin("~", path + ft_strlen(home_path)));
-	else
-		ft_putstr(path);
+	parsed_home = parse_home_path(path, 0);
+	ft_putstr(parsed_home);
+	if (!ft_strequ(parsed_home, path))
+		free(parsed_home);
 }
 
 void    change_dir(char *path, int print_path)
@@ -28,6 +27,7 @@ void    change_dir(char *path, int print_path)
 	char	*cwd;
 	char	buff[4097];
 
+	cwd = getcwd(buff, 4096);
 	if (!chdir(path))
 	{
 		if (print_path)
@@ -35,7 +35,6 @@ void    change_dir(char *path, int print_path)
 			print_pth(path);
 			ft_putchar('\n');
 		}
-		cwd = getcwd(buff, 4096);
 		set_env_var("OLDPWD", cwd);
 		set_env_var("PWD", path);
 	}
@@ -54,6 +53,7 @@ void	cd_builtin(char **command)
 	char	buff[4097];
 	char	*cwd;
 	char	*home_path;
+	char	*parsed_home;
 
 	home_path = get_env_var("HOME");
 	if (!command[0])
@@ -74,13 +74,13 @@ void	cd_builtin(char **command)
 	}
 	else
 	{
-		if (ft_strstartswith(command[0], "~"))
-		{
-			tmp = ft_strjoin(home_path, command[0] + 1);
-			change_dir(tmp, 0);
-			free(tmp);
-			return ;
-		}
-		change_dir(command[0], 0);
+		if (ft_strequ(command[0], "--"))
+			return (change_dir(home_path, 0));
+		else if (command[0][0] == '-' && !command[0][2])
+			return (change_dir(get_env_var("OLDPWD"), 1));
+		parsed_home = parse_home_path(command[0], 1);
+		change_dir(parsed_home, 0);
+		if (!ft_strequ(parsed_home, command[0]))
+			free(parsed_home);
 	}
 }

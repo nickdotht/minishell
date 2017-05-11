@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 15:41:15 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/08 12:58:54 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/10 17:19:05 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,14 @@ void	echo_builtin(char **command)
 		write(1, "\n", 1);
 	while (command[++i])
 	{
-		if (i == 0 && command[0][0] == '-')
+		if (i == 0 && command[i][0] == '-')
 		{
 			if (command[0][1] == 'n' && command[0][2] == '\0')
 				n_flag = 1;
+			else if (command[0][1] == '\0')
+				ft_putchar(' ');
+			else
+				echo_out(command, i);
 		}
 		else if (command[i][0] == '$')
 			echo_var(command, i);
