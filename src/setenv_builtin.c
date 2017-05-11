@@ -87,9 +87,6 @@ void	set_env_var(char *key, char *value)
 
 void    setenv_builtin(char **command)
 {
-	int     i;
-
-	i = -1;
 	if (!command[0])
 		return (print_env());
 	if (command[2])
