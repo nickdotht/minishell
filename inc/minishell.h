@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 17:40:04 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/11 01:49:21 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/11 15:51:16 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <signal.h>
 # include <dirent.h>
+# include <stdio.h>
 # include <errno.h>
 # include "libft.h"
 

@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 04:17:47 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/11 02:46:34 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/11 17:11:42 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,31 @@ void	free_command(char **command)
 	command = NULL;
 }
 
+void parse_input(char **input)
+{
+		int		ret;
+		char	buf;
+		int		i;
+		int		count;
+
+		*input = ft_strnew(1);
+		count = 1;
+		i = 0;
+		while ((ret = read(0, &buf, 1)) && buf != '\n')
+		{
+			*(*input + i++) = buf;
+			*input = ft_realloc(*input, count, count + 1);
+			count++;
+		}
+		*(*input + i) = '\0';
+		if (!ret) // ctrl D
+		{
+			// Free env here
+			write(1, "\n", 1);
+			exit(0);
+		}
+}
+
 int	main(int ac, char **av, char **envv) {
 	(void)ac;
 	(void)av;
@@ -62,7 +87,7 @@ int	main(int ac, char **av, char **envv) {
 	{
 		display_prompt();
 		signal(SIGINT, signal_handler);
-		get_next_line(0, &input);
+		parse_input(&input);
 		if (ft_isemptystr(input, 1))
 			continue ;
 		command = ft_strsplitall(input);
