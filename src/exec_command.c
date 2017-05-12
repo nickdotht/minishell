@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 05:44:00 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/11 03:05:57 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/11 21:53:31 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,9 @@ int		exec_command(char **command)
 	struct stat	f;
 	char		*parsed_home;
 
-	get_path(&path);
 	if (check_builtins(command))
 		return (0);
+	get_path(&path);
 	int i = -1;
 	while (path && path[++i])
 	{
