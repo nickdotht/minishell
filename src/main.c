@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 04:17:47 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/12 00:46:28 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/12 17:20:01 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void you_complete_me(char *path, char **str, int search_count)
 		closedir(dir);
 }
 
-void 		auto_complete(char **str, int search_count)
+int 		auto_complete(char **str, int search_count)
 {
 	char	**path;
 	int		i;
@@ -85,12 +85,13 @@ void 		auto_complete(char **str, int search_count)
 	while (path && path[++i])
 	{
 		if (ft_strstartswith(path[i], *str)) // We're not handling absolute paths
-			break ;
+			return (0);
 		bin_path = ft_pathjoin(path[i], *str);
 		if (lstat(bin_path, &f) != -1) // found it, nothing to be done
-			break ;
+			return (0);
 		you_complete_me(path[i], str, search_count);
 	}
+	return (1);
 }
 
 /*
@@ -98,13 +99,28 @@ void 		auto_complete(char **str, int search_count)
 *	Make this function take multiple args so we can free any amount of memory
 * if it's really control d
 */
-void check_control_d(int ret) {
-	if (!ret)
+void check_control_d(int n) {
+	if (!n || n == 0x04) // if 0 or eot (ascii)
 	{
 		// Free env here
 		write(1, "\n", 1);
 		exit(0);
 	}
+}
+
+int check_backspace(char n, char **input) {
+	if (n == 0x7f)
+	{
+		if (ft_strlen(*input))
+		{
+			write(1, "\b", 1);
+			write(1, " ", 1);
+			write(1, "\b", 1);
+			*input = ft_strpop(*input);
+		}
+		return (1);
+	}
+	return (0);
 }
 
 void parse_input(char **input)
@@ -121,20 +137,14 @@ void parse_input(char **input)
 			{
 				if (*input && !ft_strchr(*input, ' '))
 				{
-					auto_complete(input, pos++);
-					while ((ret = read(0, &buf, 1)) && buf != '\n' && buf == '\t')
-						auto_complete(input, pos++);
-					check_control_d(ret);
+					if (auto_complete(input, pos++))
+						continue ;
 				}
+			}
+			if (check_backspace(buf, input))
 				continue ;
-			}
-			if (buf == 4)
-			{
-				// free env here
-				write(1, "\n", 1);
-				exit(0);
-			}
-			ft_strjoin(*input, &buf);
+			check_control_d(buf);
+			*input = ft_strjoinch(*input, buf);
 			write(0, &buf, 1);
 		}
 		if (buf == '\n')
@@ -142,43 +152,45 @@ void parse_input(char **input)
 		check_control_d(ret);
 }
 
-void 	set_termcap(char **input)
+int 	set_termcap(void)
 {
 	struct termios old;
 	struct termios new;
+	int		ret;
+	char **command;
+	char *input;
 
 	tcgetattr(STDIN_FILENO,&old);
 	new =	old;
-	new.c_lflag &= (~ICANON & ~ECHO);
-	new.c_cc[VTIME] = 0;
-	new.c_cc[VMIN] = 1;
+	new.c_lflag &= ~(ICANON | ECHO);
 	tcsetattr(STDIN_FILENO,TCSANOW,&new);
-	parse_input(input);
+	parse_input(&input);
+	if (ft_isemptystr(input, 1))
+		return (1);
+	command = ft_strsplitall(input);
+	free(input);
+	input = NULL;
+	ret = exec_command(command);
+	free_command(command);
+	if (ret == -1)
+		return (ret);
 	tcsetattr(STDIN_FILENO,TCSANOW,&old);
+	return (0);
 }
 
 int	main(int ac, char **av, char **envv) {
 	(void)ac;
 	(void)av;
-	char	*input;
-	int		ret;
-	char **command;
+	int ret;
 
 	init_env(envv);
 	while (1)
 	{
 		display_prompt();
 		signal(SIGINT, signal_handler);
-		set_termcap(&input);
-		printf("HMM%sPPPP\n", input);
-		if (ft_isemptystr(input, 1))
+		if ((ret = set_termcap()) == 1)
 			continue ;
-		command = ft_strsplitall(input);
-		free(input);
-		input = NULL;
-		ret = exec_command(command);
-		free_command(command);
-		if (ret == -1)
+		else if (ret == -1)
 			break ;
 	}
 	exit(0);

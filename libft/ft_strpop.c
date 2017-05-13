@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   ft_strpop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/10/21 01:11:53 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/12 16:26:11 by jrameau          ###   ########.fr       */
+/*   Created: 2017/05/12 17:01:31 by jrameau           #+#    #+#             */
+/*   Updated: 2017/05/12 17:04:44 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_realloc(void *ptr, size_t prev_size, size_t new_size)
+char *ft_strpop(char *str)
 {
-	void	*new;
+  char *new;
 
-	if (!ptr)
-		return (NULL);
-	new = ft_memalloc(new_size);
-	ft_memcpy(new, ptr, prev_size < new_size ? prev_size : new_size);
-	free(ptr);
-	return (new);
+  new = ft_strndup(str, ft_strlen(str) - 1);
+  free(str);
+  return (new);
 }
