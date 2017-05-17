@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 15:41:15 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/10 17:19:05 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/17 15:30:30 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,20 @@ void	echo_out(char **command, int i)
 	int		starts_with;
 	int		ends_with;
 	int		str_len;
+	char	*home_path;
 
 	starts_with = IS_QUOTE(command[i][0]);
 	str_len = (int)ft_strlen(command[i]);
 	ends_with = IS_QUOTE(command[i][str_len - 1]);
+	home_path = get_env_var("HOME");
 	if (ends_with && starts_with)
 		ft_putnstr(command[i] + 1, -1);
 	else if (ends_with)
 		ft_putnstr(command[i], -1);
 	else if (starts_with)
 		ft_putstr(command[i] + 1);
+	else if (command[i][0] == '~')
+		ft_putstr(ft_pathjoin(home_path, command[i] + 1)); // free this mem
 	else
 		ft_putstr(command[i]);
 	if (command[i + 1])

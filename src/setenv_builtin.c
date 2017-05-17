@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:16:55 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/09 18:29:30 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/17 15:30:03 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*get_env_var(char *var)
 	i = -1;
 	while (g_envv[++i])
 	{
-		if (ft_strstartswith(g_envv[i], ft_strjoinch(var, '=')))
+		if (ft_strstartswith(g_envv[i], ft_strjoinch(var, '='))) // free this mem
 			return (ft_strchr(g_envv[i], '=') + 1);
 	}
 	return (NULL);
