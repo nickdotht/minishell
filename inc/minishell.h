@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 17:40:04 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/11 22:55:56 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/11 15:51:16 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <dirent.h>
 # include <stdio.h>
 # include <errno.h>
-#include <termios.h>
 # include "libft.h"
 
 # define IS_QUOTE(x) (x == '"' || x == '\'')
@@ -45,5 +44,4 @@ void					change_dir(char *path, int print_path);
 char					*parse_home_path(char *path, int reverse_parse);
 void          signal_handler(int signo);
 void          proc_signal_handler(int signo);
-void	         get_path(char ***path);
 #endif
