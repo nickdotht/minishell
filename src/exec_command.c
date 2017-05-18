@@ -6,24 +6,30 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 05:44:00 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/16 23:35:09 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/18 01:03:58 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	get_path(char ***path)
+/*
+** Frees all the memory allocated for the path variable
+**
+** @param		path	The path to free, which is an array of strings
+** @return		N/A
+*/
+void	clear_path(char **path)
 {
-	int i = -1;
-	while (g_envv[++i])
+	int		i;
+
+	if (!path)
+		return ;
+	i = -1;
+	while (path[++i])
 	{
-		if (ft_strstartswith(g_envv[i], "PATH"))
-		{
-			*path = ft_strsplit(g_envv[i] + 5, ':');
-			return ;
-		}
+		free(path[i]);
 	}
-	*path = NULL;
+	free(path);
 }
 
 int		run_cmd(char *path, char **args, int has_mem)
@@ -80,27 +86,53 @@ int		check_builtins(char **command)
 	return (0);
 }
 
-void	clean_path(char **path)
+/*
+** Checks if the path is a regular file and is an executable, if it is,
+** it executes it, if not, it prints an error on the screen then it returns
+** whether it executed successfully or not
+**
+** @param		bin_path	The path to search for
+** @param		f			The path information from stat/lstat
+** @param		command		The array of strings containing each word from the
+** 							input
+** @return		0 if the first path is not an executable or if the command
+** 				was not executed properly or 1 for the opposite
+*/
+int		is_executable(char *bin_path, struct stat f, char **command)
 {
-	int		i;
-
-	i = -1;
-	while (path[++i])
-		free(path[i]);
-	free(path);
+	if (f.st_mode & S_IFREG)
+	{
+		if (f.st_mode & S_IXUSR)
+			return (run_cmd(bin_path, command));
+		else
+		{
+			ft_putstr("minishell: permission denied: ");
+			ft_putendl(bin_path);
+		}
+	}
+	free(bin_path);
+	return (0);
 }
 
-int		exec_command(char **command)
+/*
+** Uses the first word of the input to search for an existing executable on the
+** system, executes it if it found it and returns whether it found it or not
+**
+** @param		command		The array of strings containing each word from the
+** 							input
+** @param		path		The value of the PATH environment variable
+** @return		0 if the first word is not an executable or if the command
+**				was not executed properly or 1 for the opposite
+*/
+int		check_bins(char **command)
 {
-	char		**path;
-	char		*bin_path;
-	struct stat	f;
-	char		*parsed_home;
+	int				i;
+	char			*bin_path;
+	char			**path;
+	struct stat		f;
 
-	if (check_builtins(command))
-		return (0);
-	get_path(&path);
-	int i = -1;
+	path = ft_strsplit(get_env_var("PATH"), ':');
+	i = -1;
 	while (path && path[++i])
 	{
 		if (ft_strstartswith(command[0], path[i]))
@@ -110,33 +142,44 @@ int		exec_command(char **command)
 		if (lstat(bin_path, &f) == -1)
 			free(bin_path);
 		else
-			if (f.st_mode & S_IFREG)
-			{
-				if (f.st_mode & S_IXUSR)
-					return (run_cmd(bin_path, command, 1));
-				else
-				{
-					ft_putstr("minishell: permission denied: ");
-					ft_putendl(bin_path);
-					return (0);
-				}
-			}
+		{
+			clear_path(&path);
+			return (is_executable(bin_path, f, command));
+		}
 	}
+	clear_path(&path);
+	return (0);
+}
+
+/*
+** Executes a command and prints the result on the screen then returns whether
+** there was a an exit or not
+** TODO: cheche tt kote mwen use parse_home_path pou m free memory yo epi cheche
+** tout kote m use run_cmd pou m retire deny argument an
+**
+** @param		command		The command to execute
+** @return		-1 if there was an interruption (exit) or 0 if not
+*/
+int		exec_command(char **command)
+{
+	struct stat	f;
+	char		*parsed_home;
+
+	if (check_builtins(command) || check_bins(command))
+		return (0);
 	parsed_home = parse_home_path(command[0], 1);
 	if (lstat(parsed_home, &f) != -1)
 	{
 		if (f.st_mode & S_IFDIR)
 		{
 			change_dir(parsed_home, 0);
-			if (!ft_strequ(parsed_home, command[0]))
-				free(parsed_home);
+			free(parsed_home);
 			return (0);
 		}
 		else if (f.st_mode & S_IXUSR)
-			return (run_cmd(parsed_home, command, 0));
+			return (run_cmd(parsed_home, command));
 	}
-	if (path)
-		clean_path(path);
+	free(parsed_home);
 	ft_putstr("minishell: command not found: ");
 	ft_putendl(command[0]);
 	return (0);

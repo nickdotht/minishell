@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 17:40:04 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/11 15:51:16 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/17 23:06:59 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 
 char					**g_envv;
 
-void					display_prompt(void);
+void					display_prompt_msg(void);
 int						exec_command(char **command);
 void					echo_builtin(char **command);
 void					cd_builtin(char **command);
@@ -44,4 +44,5 @@ void					change_dir(char *path, int print_path);
 char					*parse_home_path(char *path, int reverse_parse);
 void          signal_handler(int signo);
 void          proc_signal_handler(int signo);
+void          free_envv(void);
 #endif

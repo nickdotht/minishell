@@ -26,7 +26,7 @@ void    signal_handler(int signo)
   if (signo == SIGINT)
 	{
 		ft_putstr("\n");
-		display_prompt();
+		display_prompt_msg();
     signal(SIGINT, signal_handler);
 	}
 }

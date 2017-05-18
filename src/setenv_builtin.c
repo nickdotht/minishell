@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:16:55 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/17 15:30:03 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/17 22:55:53 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,14 @@ int    find_env_var(char *var)
 	return (i);
 }
 
+/*
+*
+* Returns the environment value of the variable name to find
+*
+* @param	var		The variable name to find
+* @return	NULL if var wasn't found, or a pointer to
+*			the value of var in the environment
+*/
 char	*get_env_var(char *var)
 {
 	int     i;

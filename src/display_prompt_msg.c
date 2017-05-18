@@ -6,42 +6,34 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 04:49:25 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/10 17:54:47 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/17 23:27:31 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_home_path(void)
-{
-	int i;
-
-	i = -1;
-	while (g_envv[++i])
-	{
-		if (ft_strstartswith(g_envv[i], "HOME"))
-			return g_envv[i] + 5;
-	}
-	return (NULL);
-}
-
+/*
+** Parses a path string from ~ to the home path or from the home path to ~
+** depending on reverse_parse and returns the parsed string
+**
+** @param	path	the string to parse
+** @param	reverse_parse	0 to parse from home path to ~, 1 to parse from ~
+** 						to home path
+** @return	NULL if path doesn't exist or the parsed string (new) or path if
+** 			path is not a fit
+*/
 char	*parse_home_path(char *path, int reverse_parse)
 {
 	char	*home_path;
 	char	*new;
-	char	*compare;
 
 	if (!path)
 		return (NULL);
-	home_path = get_home_path();
-	compare = reverse_parse ? ft_strdup("~") : home_path;
-	if (!ft_strstartswith(path, compare))
+	home_path = get_env_var("HOME");
+	if (!ft_strstartswith(path, reverse_parse ? "~" : home_path))
 		return (path);
 	if (reverse_parse)
-	{
 		new = ft_pathjoin(home_path, path + 1);
-		free(compare);
-	}
 	else
 	{
 		if (*(path + ft_strlen(home_path)) == '\0')
@@ -52,13 +44,22 @@ char	*parse_home_path(char *path, int reverse_parse)
 	return (new);
 }
 
-void	display_prompt(void)
+/*
+** Displays a prompt message on the screen
+**
+** @param	N/A
+** @return	N/A
+*/
+void	display_prompt_msg(void)
 {
 	char	*cwd;
 	char	buff[4096 + 1];
 
 	cwd = getcwd(buff, 4096);
-	ft_putstr(parse_home_path(cwd, 0)); // free that new string later
+	parsed_cwd = parse_home_path(cwd, 0);
+	free(cwd);
+	ft_putstr(parsed_cwd);
+	free(parsed_cwd);
 	ft_putstr(" \033[31m︻\033[0m\033[32m┳\033[0m\033[33mデ");
 	ft_putstr("\033[0m\033[34m═\033[0m\033[35m—\033[0m$ ");
 }
