@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 04:17:47 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/18 23:04:33 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/19 11:03:01 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,31 +106,30 @@ char	*parse_input(char *input)
 {
 	int		i;
 	char	*new;
-	int		should_parse_vars;
-	int		should_parse_home;
-	char	c;
+	int		should_parse;
 
 	i = -1;
 	new = ft_strnew(1);
-	should_parse_vars = (ft_strchr(input, '$') != NULL);
-	should_parse_home = (ft_strchr(input, '~') != NULL);
-	while (input[++i])
+	should_parse = (ft_strchr(input, '$') != NULL) ||
+		(ft_strchr(input, '~') != NULL);
+	while (input[++i] && should_parse)
 	{
-		if (input[i] == '$' && should_parse_vars)
+		if (input[i] == '$')
 		{
 			new = ft_strjoincl(new, parse_env_var(input, i + 1), 0);
-			while (input[i + 1] && !IS_SPACE(input[i + 1]))
+			while (input[i + 1] && !IS_SPACE(input[i + 1])) // make it stop when it find another variable too
 				i++;
 		}
-		else if (input[i - 1] && IS_SPACE(input[i - 1]) && input[i] == '~'
-			&& should_parse_home)
-			new = ft_strjoincl(new, parse_home_path(input + i, 1), 1);
-		else
+		else if (((input[i - 1] && IS_SPACE(input[i - 1])) || i == 0) && input[i] == '~')
 		{
-			c = input[i];
-			new = ft_strjoinch(new, c);
+			new = ft_strjoincl(new, parse_home_path(input + i, 1), 1);
+			i += ft_strlen(input + i) - 1;
 		}
+		else
+			new = ft_strjoinch(new, input[i]);
 	}
+	if (!should_parse)
+		return (ft_strdup(input));
 	return (new);
 }
 
@@ -148,6 +147,7 @@ static void	get_input(char **input)
 	char	buf;
 	int		i;
 	int		count;
+	char	*old;
 
 	*input = ft_strnew(1);
 	count = 1;
@@ -162,7 +162,9 @@ static void	get_input(char **input)
 	if (!ret)
 		exit_shell();
 	printf("Final string is: %s\n", *input);
+	old = *input;
 	*input = parse_input(*input);
+	free(old);
 	printf("Parsed string is: %s\n", *input);
 	exit(0);
 }

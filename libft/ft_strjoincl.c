@@ -6,12 +6,11 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/18 19:30:53 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/18 23:06:56 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/19 10:59:24 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
 char	*ft_strjoincl(char *s1, char *s2, int free_both)
 {
