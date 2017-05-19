@@ -82,10 +82,9 @@ char	*parse_env_var(char *str, int pos)
 	while (str[pos] && !IS_SPACE(str[pos]))
 	{
 		c = str[pos];
-		key = ft_strjoincl(key, &c, 0);
+		key = ft_strjoinch(key, c);
 		pos++;
 	}
-	printf("HMMM%sLMAO\n", key);
 	if (!(value = get_env_var(key)))
 	{
 		free(key);
@@ -129,7 +128,7 @@ char	*parse_input(char *input)
 		else
 		{
 			c = input[i];
-			new = ft_strjoincl(new, &c, 0);
+			new = ft_strjoinch(new, c);
 		}
 	}
 	return (new);
