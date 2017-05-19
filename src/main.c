@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 04:17:47 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/17 23:36:45 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/18 23:04:33 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,26 +52,98 @@ void	init_envv(char **envv)
 	}
 }
 
-void	free_command(char **command)
+/*
+** Kills the shell gracefully
+**
+** @param		N/A
+** @return		N/A
+*/
+void	exit_shell(void)
 {
-	int		i;
-
-	i = -1;
-	while (command[++i])
-		free(command[i]);
-	free(command);
-	command = NULL;
+	ft_freestrarr(g_envv);
+	write(1, "\n", 1);
+	exit(0);
 }
 
 /*
-** Displays a prompt on the screen and parses the input character by character
+** Parses a string to convert variables to their value then returns the parsed
+** string
+**
+** @param		str		The input string to parse
+** @param		pos		The position from which to start in the string
+*/
+char	*parse_env_var(char *str, int pos)
+{
+	char	*value;
+	char	*key;
+	char	c;
+
+	key = ft_strnew(1);
+	while (str[pos] && !IS_SPACE(str[pos]))
+	{
+		c = str[pos];
+		key = ft_strjoincl(key, &c, 0);
+		pos++;
+	}
+	printf("HMMM%sLMAO\n", key);
+	if (!(value = get_env_var(key)))
+	{
+		free(key);
+		return (NULL);
+	}
+	free(key);
+	return (value);
+}
+
+/*
+** Parses the input by changing $VAR_NAME to the value of VAR_NAME in the
+** environment variable or by nothing if it doesn't exist and by changing ~
+** to the value of the user's home path then returns the parsed string
+**
+** @param		input		The input string
+** @return		The parsed string
+*/
+char	*parse_input(char *input)
+{
+	int		i;
+	char	*new;
+	int		should_parse_vars;
+	int		should_parse_home;
+	char	c;
+
+	i = -1;
+	new = ft_strnew(1);
+	should_parse_vars = (ft_strchr(input, '$') != NULL);
+	should_parse_home = (ft_strchr(input, '~') != NULL);
+	while (input[++i])
+	{
+		if (input[i] == '$' && should_parse_vars)
+		{
+			new = ft_strjoincl(new, parse_env_var(input, i + 1), 0);
+			while (input[i + 1] && !IS_SPACE(input[i + 1]))
+				i++;
+		}
+		else if (input[i - 1] && IS_SPACE(input[i - 1]) && input[i] == '~'
+			&& should_parse_home)
+			new = ft_strjoincl(new, parse_home_path(input + i, 1), 1);
+		else
+		{
+			c = input[i];
+			new = ft_strjoincl(new, &c, 0);
+		}
+	}
+	return (new);
+}
+
+/*
+** Displays a prompt on the screen and fills the input character by character
 ** then adds it to the referenced variable (input)
 ** TODO: Not the most efficient way, will improve it later
 **
 ** @param	input	The address of the variable to fill with the parsed input
 ** @return	N/A
 */
-void	parse_input(char **input)
+static void	get_input(char **input)
 {
 	int		ret;
 	char	buf;
@@ -89,29 +161,11 @@ void	parse_input(char **input)
 	}
 	*(*input + i) = '\0';
 	if (!ret)
-	{
-		free_envv();
-		write(1, "\n", 1);
-		exit(0);
-	}
-}
-
-/*
-** Frees all the memory allocated for the global variable g_envv
-**
-** @param		N/A
-** @return		N/A
-*/
-void	free_envv(void)
-{
-	int i;
-
-	i = -1;
-	while (g_envv[++i])
-	{
-		free(g_envv[i]);
-	}
-	free(g_envv);
+		exit_shell();
+	printf("Final string is: %s\n", *input);
+	*input = parse_input(*input);
+	printf("Parsed string is: %s\n", *input);
+	exit(0);
 }
 
 /*
@@ -134,17 +188,17 @@ int		main(int ac, char **av, char **envv) {
 	{
 		display_prompt_msg();
 		signal(SIGINT, signal_handler);
-		parse_input(&input);
+		get_input(&input);
 		if (ft_isemptystr(input, 1))
 			continue ;
 		command = ft_strsplitall(input);
 		free(input);
 		input = NULL;
 		ret = exec_command(command);
-		free_command(command);
+		ft_freestrarr(command);
 		if (ret == -1)
 			break ;
 	}
-	free_envv();
+	ft_freestrarr(g_envv);
 	return (0);
 }

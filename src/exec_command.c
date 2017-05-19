@@ -6,78 +6,58 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 05:44:00 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/18 01:03:58 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/18 22:34:10 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /*
-** Frees all the memory allocated for the path variable
+** Runs the binary file by creating a new process and handles signals in case
+** of interruptions then returns whether it executed successfully or not
 **
-** @param		path	The path to free, which is an array of strings
-** @return		N/A
+** @param		path	The path to the binary file
+** @param		args	The arguments to pass to the system command
+** @return		-1 on failure, 0 on success
 */
-void	clear_path(char **path)
+int		run_cmd(char *path, char **args)
 {
-	int		i;
+	pid_t	pid;
 
-	if (!path)
-		return ;
-	i = -1;
-	while (path[++i])
-	{
-		free(path[i]);
-	}
-	free(path);
-}
-
-int		run_cmd(char *path, char **args, int has_mem)
-{
-	 pid_t	pid;
-
-	 pid = fork();
-	 signal(SIGINT, proc_signal_handler);
+	pid = fork();
+	signal(SIGINT, proc_signal_handler);
 	if (pid == 0)
 		execve(path, args, g_envv);
-	 else if (pid < 0)
-	 {
-		 ft_putendl("Fork failed to create a new process.");
-		 return (-1);
-	 }
+	else if (pid < 0)
+	{
+		ft_putendl("Fork failed to create a new process.");
+		return (-1);
+	}
 	wait(&pid);
-	if (path && has_mem)
+	if (path)
 		free(path);
 	return (0);
 }
 
-int		check_builtins(char **command)
+/*
+** Checks if the first word in the input is one of the builtin commands, if it
+** is, it executes it and returns -1, 0, or 1
+**
+** @param		command		The array of strings that contains the command
+** @return		-1 on exit, 0 if it's not a builtin, 1 otherwise
+*/
+static int		check_builtins(char **command)
 {
 	if (ft_strequ(command[0], "exit"))
-	{
-		// Clean stuff here first (memory leaks)
-		exit(0);
-	}
+		return (-1);
 	else if (ft_strequ(command[0], "echo"))
-	{
-		echo_builtin(command + 1);
-		return (1);
-	}
+		return (echo_builtin(command + 1));
 	else if (ft_strequ(command[0], "cd"))
-	{
-		cd_builtin(command + 1);
-		return (1);
-	}
+		return (cd_builtin(command + 1));
 	else if (ft_strequ(command[0], "setenv"))
-	{
-		setenv_builtin(command + 1);
-		return (1);
-	}
+		return (setenv_builtin(command + 1));
 	else if (ft_strequ(command[0], "unsetenv"))
-	{
-		unsetenv_builtin(command + 1);
-		return (1);
-	}
+		return (unsetenv_builtin(command + 1));
 	else if (ft_strequ(command[0], "env"))
 	{
 		print_env();
@@ -98,7 +78,7 @@ int		check_builtins(char **command)
 ** @return		0 if the first path is not an executable or if the command
 ** 				was not executed properly or 1 for the opposite
 */
-int		is_executable(char *bin_path, struct stat f, char **command)
+static int		is_executable(char *bin_path, struct stat f, char **command)
 {
 	if (f.st_mode & S_IFREG)
 	{
@@ -124,7 +104,7 @@ int		is_executable(char *bin_path, struct stat f, char **command)
 ** @return		0 if the first word is not an executable or if the command
 **				was not executed properly or 1 for the opposite
 */
-int		check_bins(char **command)
+static int		check_bins(char **command)
 {
 	int				i;
 	char			*bin_path;
@@ -143,19 +123,22 @@ int		check_bins(char **command)
 			free(bin_path);
 		else
 		{
-			clear_path(&path);
+			ft_freestrarr(path);
 			return (is_executable(bin_path, f, command));
 		}
 	}
-	clear_path(&path);
+	ft_freestrarr(path);
 	return (0);
 }
 
 /*
 ** Executes a command and prints the result on the screen then returns whether
 ** there was a an exit or not
-** TODO: cheche tt kote mwen use parse_home_path pou m free memory yo epi cheche
-** tout kote m use run_cmd pou m retire deny argument an
+** The steps are:
+**		1. Check if it's a builtin command, if not...
+**		2. Check if it's a system command, if not ...
+**		3. Check if it's a folder or an executable, if not...
+**		4. Display an error (not found) message.
 **
 ** @param		command		The command to execute
 ** @return		-1 if there was an interruption (exit) or 0 if not
@@ -164,9 +147,12 @@ int		exec_command(char **command)
 {
 	struct stat	f;
 	char		*parsed_home;
+	int			is_builtin;
 
-	if (check_builtins(command) || check_bins(command))
+	if ((is_builtin = check_builtins(command)) || check_bins(command))
 		return (0);
+	if (is_builtin < 0)
+		return (-1);
 	parsed_home = parse_home_path(command[0], 1);
 	if (lstat(parsed_home, &f) != -1)
 	{

@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 17:40:04 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/17 23:06:59 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/18 22:30:28 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ char					**g_envv;
 
 void					display_prompt_msg(void);
 int						exec_command(char **command);
-void					echo_builtin(char **command);
-void					cd_builtin(char **command);
-void					setenv_builtin(char **command);
+int					echo_builtin(char **command);
+int					cd_builtin(char **command);
+int					setenv_builtin(char **command);
 char					*get_env_var(char *var);
-void				    unsetenv_builtin(char **command);
+int				    unsetenv_builtin(char **command);
 int						envv_len(char **envv);
 int						find_env_var(char *var);
 char					**realloc_envv(int new_size);
@@ -44,5 +44,4 @@ void					change_dir(char *path, int print_path);
 char					*parse_home_path(char *path, int reverse_parse);
 void          signal_handler(int signo);
 void          proc_signal_handler(int signo);
-void          free_envv(void);
 #endif

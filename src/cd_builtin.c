@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 15:56:23 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/10 17:56:35 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/18 22:33:19 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ void	print_pth(char *path)
 
 	parsed_home = parse_home_path(path, 0);
 	ft_putstr(parsed_home);
-	if (!ft_strequ(parsed_home, path))
-		free(parsed_home);
+	free(parsed_home);
 }
 
 void    change_dir(char *path, int print_path)
@@ -47,7 +46,7 @@ void    change_dir(char *path, int print_path)
 	}
 }
 
-void	cd_builtin(char **command)
+int	cd_builtin(char **command)
 {
 	char	*tmp;
 	char	buff[4097];
@@ -57,9 +56,15 @@ void	cd_builtin(char **command)
 
 	home_path = get_env_var("HOME");
 	if (!command[0])
-		return (change_dir(home_path, 0));
+	{
+		change_dir(home_path, 0);
+		return (1);
+	}
 	if (command[2])
-		return (ft_putendl("cd: too many arguments"));
+	{
+		ft_putendl("cd: too many arguments");
+		return (1);
+	}
 	if (command[1])
 	{
 		cwd = getcwd(buff, 4096);
@@ -67,7 +72,7 @@ void	cd_builtin(char **command)
 		{
 			ft_putstr("cd: string not in pwd: ");
 			ft_putendl(command[0]);
-			return ;
+			return (1);
 		}
 		change_dir(tmp, 1);
 		free(tmp);
@@ -75,12 +80,18 @@ void	cd_builtin(char **command)
 	else
 	{
 		if (ft_strequ(command[0], "--"))
-			return (change_dir(home_path, 0));
+		{
+			change_dir(home_path, 0);
+			return (1);
+		}
 		else if (command[0][0] == '-' && !command[0][2])
-			return (change_dir(get_env_var("OLDPWD"), 1));
+		{
+			change_dir(get_env_var("OLDPWD"), 1);
+			return (1);
+		}
 		parsed_home = parse_home_path(command[0], 1);
 		change_dir(parsed_home, 0);
-		if (!ft_strequ(parsed_home, command[0]))
-			free(parsed_home);
+		free(parsed_home);
 	}
+	return (1);
 }

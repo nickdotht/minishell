@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/08 15:35:14 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/17 17:26:58 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/18 22:31:55 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,16 @@ void    remove_env_var(int var_pos)
 	g_envv = realloc_envv(var_count);
 }
 
-void    unsetenv_builtin(char **command)
+int    unsetenv_builtin(char **command)
 {
 	int     i;
 	int		var_pos;
 
 	if (!command[0])
-		return (ft_putendl("unsetenv: Too few arguments."));
+	{
+		ft_putendl("unsetenv: Too few arguments.");
+		return (1);
+	}
 	i = -1;
 	while (command[++i])
 	{
@@ -55,4 +58,5 @@ void    unsetenv_builtin(char **command)
 		if (g_envv[var_pos])
 			remove_env_var(var_pos);
 	}
+	return (1);
 }

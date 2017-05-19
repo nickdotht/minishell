@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:16:55 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/17 22:55:53 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/18 22:31:29 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,18 @@ void	set_env_var(char *key, char *value)
 	}
 }
 
-void    setenv_builtin(char **command)
+int    setenv_builtin(char **command)
 {
 	if (!command[0])
-		return (print_env());
+	{
+		print_env();
+		return (1);
+	}
 	if (command[2])
-		return (ft_putendl("setenv: Too many arguments."));
+	{
+		ft_putendl("setenv: Too many arguments.");
+		return (1);
+	}
 	set_env_var(command[0], command[1]);
+	return (1);
 }

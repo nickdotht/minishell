@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   display_prompt.c                                   :+:      :+:    :+:   */
+/*   display_prompt_msg.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 04:49:25 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/17 23:27:31 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/18 22:35:36 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,11 @@ void	display_prompt_msg(void)
 {
 	char	*cwd;
 	char	buff[4096 + 1];
+	char	*parsed_cwd;
 
 	cwd = getcwd(buff, 4096);
 	parsed_cwd = parse_home_path(cwd, 0);
-	free(cwd);
+	// free(cwd);
 	ft_putstr(parsed_cwd);
 	free(parsed_cwd);
 	ft_putstr(" \033[31m︻\033[0m\033[32m┳\033[0m\033[33mデ");

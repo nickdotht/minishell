@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/21 21:30:24 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/11 00:26:03 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/18 22:28:56 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,4 +126,6 @@ char				*ft_strreplace(char *str, char *term, char *replace_by);
 int					ft_isemptystr(char *str, int consider_space);
 char				**ft_strsplitall(char const *s);
 int					ft_countwordsall(char const *str);
+void				ft_freestrarr(char **arr);
+char	*ft_strjoincl(char *s1, char *s2, int free_both);
 #endif
