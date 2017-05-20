@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:16:55 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/18 22:31:29 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/20 01:15:45 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,18 @@ void    print_env(void)
 int    find_env_var(char *var)
 {
 	int     i;
+	char	*tmp;
 
 	i = -1;
 	while (g_envv[++i])
 	{
-		if (ft_strstartswith(g_envv[i], ft_strjoinch(var, '=')))
+		tmp = ft_strjoinch(var, '=');
+		if (ft_strstartswith(g_envv[i], tmp))
+		{
+			free(tmp);
 			return (i);
+		}
+		free(tmp);
 	}
 	return (i);
 }
@@ -74,12 +80,15 @@ char	**realloc_envv(int new_size)
 void	set_env_var(char *key, char *value)
 {
 	int		pos;
+	char	*tmp;
 
 	pos = find_env_var(key);
+	tmp = ft_strjoin("=", value);
 	if (g_envv[pos])
 	{
+		free(g_envv[pos]);
 		if (value)
-			g_envv[pos] = ft_strjoin(key, ft_strjoin("=", value));
+			g_envv[pos] = ft_strjoin(key, tmp);
 		else
 			g_envv[pos] = ft_strjoin(key, "=");
 	}
@@ -87,24 +96,34 @@ void	set_env_var(char *key, char *value)
 	{
 		g_envv = realloc_envv(pos + 1);
 		if (value)
-			g_envv[pos] = ft_strjoin(key, ft_strjoin("=", value));
+			g_envv[pos] = ft_strjoin(key, tmp);
 		else
 			g_envv[pos] = ft_strjoin(key, "=");
 	}
+	free(tmp);
 }
 
-int    setenv_builtin(char **command)
+/*
+** Executes the setenv builtin command, takes the format 'VAR_NAME VAR_VALUE',
+** not 'VAR_NAME=VAR_VALUE', when called with no arguments, it prints all the
+** environment variables, just like env, otherwise, it parses the arguments and
+** prints accordingly
+**
+** @param		args	The arguments to pass to setenv
+** @returns		1 on completion
+*/
+int    setenv_builtin(char **args)
 {
-	if (!command[0])
+	if (!args[0])
 	{
 		print_env();
 		return (1);
 	}
-	if (command[2])
+	if (args[2])
 	{
 		ft_putendl("setenv: Too many arguments.");
 		return (1);
 	}
-	set_env_var(command[0], command[1]);
+	set_env_var(args[0], args[1]);
 	return (1);
 }

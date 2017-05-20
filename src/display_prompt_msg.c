@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 04:49:25 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/18 22:35:36 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/20 00:24:22 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 ** @param	path	the string to parse
 ** @param	reverse_parse	0 to parse from home path to ~, 1 to parse from ~
 ** 						to home path
-** @return	NULL if path doesn't exist or the parsed string (new) or path if
-** 			path is not a fit
+** @return	NULL if path doesn't exist or the parsed string (new) or a copy of
+** path if path is not a fit
 */
 char	*parse_home_path(char *path, int reverse_parse)
 {
@@ -31,7 +31,7 @@ char	*parse_home_path(char *path, int reverse_parse)
 		return (NULL);
 	home_path = get_env_var("HOME");
 	if (!ft_strstartswith(path, reverse_parse ? "~" : home_path))
-		return (path);
+		return (ft_strdup(path));
 	if (reverse_parse)
 		new = ft_pathjoin(home_path, path + 1);
 	else
@@ -58,7 +58,6 @@ void	display_prompt_msg(void)
 
 	cwd = getcwd(buff, 4096);
 	parsed_cwd = parse_home_path(cwd, 0);
-	// free(cwd);
 	ft_putstr(parsed_cwd);
 	free(parsed_cwd);
 	ft_putstr(" \033[31m︻\033[0m\033[32m┳\033[0m\033[33mデ");

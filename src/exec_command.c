@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 05:44:00 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/18 22:34:10 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/19 20:54:47 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 **
 ** @param		path	The path to the binary file
 ** @param		args	The arguments to pass to the system command
-** @return		-1 on failure, 0 on success
+** @return		-1 on failure, 1 on success
 */
-int		run_cmd(char *path, char **args)
+int				run_cmd(char *path, char **args)
 {
 	pid_t	pid;
 
@@ -36,7 +36,7 @@ int		run_cmd(char *path, char **args)
 	wait(&pid);
 	if (path)
 		free(path);
-	return (0);
+	return (1);
 }
 
 /*
@@ -143,29 +143,25 @@ static int		check_bins(char **command)
 ** @param		command		The command to execute
 ** @return		-1 if there was an interruption (exit) or 0 if not
 */
-int		exec_command(char **command)
+int				exec_command(char **command)
 {
 	struct stat	f;
-	char		*parsed_home;
 	int			is_builtin;
 
 	if ((is_builtin = check_builtins(command)) || check_bins(command))
 		return (0);
 	if (is_builtin < 0)
 		return (-1);
-	parsed_home = parse_home_path(command[0], 1);
-	if (lstat(parsed_home, &f) != -1)
+	if (lstat(command[0], &f) != -1)
 	{
 		if (f.st_mode & S_IFDIR)
 		{
-			change_dir(parsed_home, 0);
-			free(parsed_home);
+			change_dir(command[0], 0);
 			return (0);
 		}
 		else if (f.st_mode & S_IXUSR)
-			return (run_cmd(parsed_home, command));
+			return (run_cmd(ft_strdup(command[0]), command));
 	}
-	free(parsed_home);
 	ft_putstr("minishell: command not found: ");
 	ft_putendl(command[0]);
 	return (0);

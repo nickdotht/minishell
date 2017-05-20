@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/21 21:30:24 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/18 22:28:56 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/19 20:57:59 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,12 +120,13 @@ int					ft_intlen(int num);
 int					ft_strendswith(char *s1, char *s2);
 char				*ft_pathjoin(char *p1, char *p2);
 void				ft_lstaddback(t_list **alst, t_list *new);
-int				get_next_line(const int fd, char **line);
+int					get_next_line(const int fd, char **line);
 void				ft_putnstr(char *str, int n);
 char				*ft_strreplace(char *str, char *term, char *replace_by);
 int					ft_isemptystr(char *str, int consider_space);
 char				**ft_strsplitall(char const *s);
 int					ft_countwordsall(char const *str);
 void				ft_freestrarr(char **arr);
-char	*ft_strjoincl(char *s1, char *s2, int free_both);
+char				*ft_strjoincl(char *s1, char *s2, int free_both);
+char				*ft_strjoinchcl(char *s1, char c);
 #endif
