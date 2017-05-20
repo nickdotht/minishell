@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+/*
+** Prints the environment variable on the screen
+**
+** @param		N/A
+** @returns	N/A
+*/
 void    print_env(void)
 {
 	int     i;
@@ -21,6 +27,14 @@ void    print_env(void)
 		ft_putendl(g_envv[i]);
 }
 
+/*
+** Searches for a variable in the environment variable and returns its
+** index, if not found, it returns the total length
+**
+** @param		var		The variable name to find
+** @returns	The index position of the variable or the length of the
+**					environment variable
+*/
 int    find_env_var(char *var)
 {
 	int     i;
@@ -41,26 +55,38 @@ int    find_env_var(char *var)
 }
 
 /*
-*
-* Returns the environment value of the variable name to find
-*
-* @param	var		The variable name to find
-* @return	NULL if var wasn't found, or a pointer to
-*			the value of var in the environment
+**
+** Returns a pointer to the value of the environment variable to find
+**
+** @param	var		The variable name to find
+** @return			NULL if var wasn't found, or a pointer to
+**							the value of var in the environment
 */
 char	*get_env_var(char *var)
 {
 	int     i;
+	char		*tmp;
 
 	i = -1;
 	while (g_envv[++i])
 	{
-		if (ft_strstartswith(g_envv[i], ft_strjoinch(var, '='))) // free this mem
+		tmp = ft_strjoinch(var, '=');
+		if (ft_strstartswith(g_envv[i], tmp))
+		{
+			free(tmp);
 			return (ft_strchr(g_envv[i], '=') + 1);
+		}
+		free(tmp);
 	}
 	return (NULL);
 }
 
+/*
+** Reallocates memory for the environment variable
+**
+** @param		new_size		The new size to allocate
+** @return	A copy of the environment variable with the new size
+*/
 char	**realloc_envv(int new_size)
 {
 	char	**new;
@@ -77,6 +103,13 @@ char	**realloc_envv(int new_size)
 	return (new);
 }
 
+/*
+** Adds a variable to the environment variable using a key value pair
+**
+** @param		key		The variable name
+** @param		value	The variable value
+** @return		N/A
+*/
 void	set_env_var(char *key, char *value)
 {
 	int		pos;
@@ -105,7 +138,7 @@ void	set_env_var(char *key, char *value)
 
 /*
 ** Executes the setenv builtin command, takes the format 'VAR_NAME VAR_VALUE',
-** not 'VAR_NAME=VAR_VALUE', when called with no arguments, it prints all the
+** not 'VAR_NAME=VAR_VALUE'. When called with no arguments, it prints all the
 ** environment variables, just like env, otherwise, it parses the arguments and
 ** prints accordingly
 **
@@ -119,10 +152,13 @@ int    setenv_builtin(char **args)
 		print_env();
 		return (1);
 	}
-	if (args[2])
+	if (args[1])
 	{
-		ft_putendl("setenv: Too many arguments.");
-		return (1);
+		if (args[2])
+		{
+			ft_putendl("setenv: Too many arguments.");
+			return (1);
+		}
 	}
 	set_env_var(args[0], args[1]);
 	return (1);
