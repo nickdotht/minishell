@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/26 05:44:00 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/19 20:54:47 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/21 01:01:53 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
 ** @param		args	The arguments to pass to the system command
 ** @return		-1 on failure, 1 on success
 */
-int				run_cmd(char *path, char **args)
+
+static int		run_cmd(char *path, char **args)
 {
 	pid_t	pid;
 
@@ -30,6 +31,7 @@ int				run_cmd(char *path, char **args)
 		execve(path, args, g_envv);
 	else if (pid < 0)
 	{
+		free(path);
 		ft_putendl("Fork failed to create a new process.");
 		return (-1);
 	}
@@ -46,6 +48,7 @@ int				run_cmd(char *path, char **args)
 ** @param		command		The array of strings that contains the command
 ** @return		-1 on exit, 0 if it's not a builtin, 1 otherwise
 */
+
 static int		check_builtins(char **command)
 {
 	if (ft_strequ(command[0], "exit"))
@@ -78,6 +81,7 @@ static int		check_builtins(char **command)
 ** @return		0 if the first path is not an executable or if the command
 ** 				was not executed properly or 1 for the opposite
 */
+
 static int		is_executable(char *bin_path, struct stat f, char **command)
 {
 	if (f.st_mode & S_IFREG)
@@ -89,6 +93,8 @@ static int		is_executable(char *bin_path, struct stat f, char **command)
 			ft_putstr("minishell: permission denied: ");
 			ft_putendl(bin_path);
 		}
+		free(bin_path);
+		return (1);
 	}
 	free(bin_path);
 	return (0);
@@ -101,9 +107,10 @@ static int		is_executable(char *bin_path, struct stat f, char **command)
 ** @param		command		The array of strings containing each word from the
 ** 							input
 ** @param		path		The value of the PATH environment variable
-** @return		0 if the first word is not an executable or if the command
-**				was not executed properly or 1 for the opposite
+** @return		0 if the first word is not an executable or if the command was
+**				not executed properly or 1 for the opposite
 */
+
 static int		check_bins(char **command)
 {
 	int				i;
@@ -141,14 +148,15 @@ static int		check_bins(char **command)
 **		4. Display an error (not found) message.
 **
 ** @param		command		The command to execute
-** @return		-1 if there was an interruption (exit) or 0 if not
+** @return		-1 if there was an interruption (exit) or 0/1 if not
 */
+
 int				exec_command(char **command)
 {
 	struct stat	f;
 	int			is_builtin;
 
-	if ((is_builtin = check_builtins(command)) || check_bins(command))
+	if ((is_builtin = check_builtins(command)) == 1 || check_bins(command))
 		return (0);
 	if (is_builtin < 0)
 		return (-1);

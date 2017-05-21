@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jrameau <jrameau@student.42.us.org>        +#+  +:+       +#+         #
+#    By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/09/21 14:58:27 by jrameau           #+#    #+#              #
-#    Updated: 2017/04/24 19:07:57 by jrameau          ###   ########.fr        #
+#    Updated: 2017/05/20 23:06:09 by jrameau          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ $(NAME): $(OBJ)
 
 # This won't run if the source files don't exist or are not modified
 $(OBJ): $(FILES)
-	@gcc $(CFLAGS) $(FILES)
+	@gcc -g $(CFLAGS) $(FILES)
 
 clean:
 	@rm -f $(OBJ)

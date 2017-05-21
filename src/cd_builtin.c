@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 15:56:23 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/20 00:24:14 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/21 01:35:18 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 ** @param		path	The path to print
 ** @return		N/A
 */
-void	print_pth(char *path)
+
+static void		print_pth(char *path)
 {
 	char	*parsed_home;
 
@@ -33,15 +34,16 @@ void	print_pth(char *path)
 ** NOTE: I was not allowed to use errno/strerror to handle errors for this
 ** project
 **
-** @param		path	The path to change to
+** @param		path			The path to change to
 ** @param		print_path		A boolean to know whether a not to print the
 **								path
 ** @return		N/A
 */
-void    change_dir(char *path, int print_path)
+
+void			change_dir(char *path, int print_path)
 {
-	char			*cwd;
-	char			buff[4097];
+	char	*cwd;
+	char	buff[4097];
 
 	cwd = getcwd(buff, 4096);
 	if (!chdir(path))
@@ -52,7 +54,6 @@ void    change_dir(char *path, int print_path)
 			ft_putchar('\n');
 		}
 		set_env_var("OLDPWD", cwd);
-		set_env_var("PWD", path);
 	}
 	else
 	{
@@ -73,7 +74,8 @@ void    change_dir(char *path, int print_path)
 ** @param		args	The list of arguments to check
 ** @return		0 if there is no second argument, 1 if there is
 */
-int		has_two_args(char **args)
+
+static int		has_two_args(char **args)
 {
 	char	*cwd;
 	char	buff[4096 + 1];
@@ -105,9 +107,10 @@ int		has_two_args(char **args)
 ** Executes the builtin cd command
 **
 ** @param		args	The arguments to pass to cd
-** @return 	1 on completion
+** @return 		1 on completion
 */
-int		cd_builtin(char **args)
+
+int				cd_builtin(char **args)
 {
 	char	*home_path;
 

@@ -6,26 +6,11 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 17:16:55 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/20 01:15:45 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/20 20:38:04 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-** Prints the environment variable on the screen
-**
-** @param		N/A
-** @returns	N/A
-*/
-void    print_env(void)
-{
-	int     i;
-
-	i = -1;
-	while (g_envv[++i])
-		ft_putendl(g_envv[i]);
-}
 
 /*
 ** Searches for a variable in the environment variable and returns its
@@ -35,9 +20,10 @@ void    print_env(void)
 ** @returns	The index position of the variable or the length of the
 **					environment variable
 */
-int    find_env_var(char *var)
+
+int		find_env_var(char *var)
 {
-	int     i;
+	int		i;
 	char	*tmp;
 
 	i = -1;
@@ -55,17 +41,17 @@ int    find_env_var(char *var)
 }
 
 /*
-**
 ** Returns a pointer to the value of the environment variable to find
 **
 ** @param	var		The variable name to find
 ** @return			NULL if var wasn't found, or a pointer to
 **							the value of var in the environment
 */
+
 char	*get_env_var(char *var)
 {
-	int     i;
-	char		*tmp;
+	int		i;
+	char	*tmp;
 
 	i = -1;
 	while (g_envv[++i])
@@ -87,6 +73,7 @@ char	*get_env_var(char *var)
 ** @param		new_size		The new size to allocate
 ** @return	A copy of the environment variable with the new size
 */
+
 char	**realloc_envv(int new_size)
 {
 	char	**new;
@@ -110,6 +97,7 @@ char	**realloc_envv(int new_size)
 ** @param		value	The variable value
 ** @return		N/A
 */
+
 void	set_env_var(char *key, char *value)
 {
 	int		pos;
@@ -145,7 +133,8 @@ void	set_env_var(char *key, char *value)
 ** @param		args	The arguments to pass to setenv
 ** @returns		1 on completion
 */
-int    setenv_builtin(char **args)
+
+int		setenv_builtin(char **args)
 {
 	if (!args[0])
 	{

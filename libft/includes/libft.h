@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/09/21 21:30:24 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/19 20:57:59 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/21 01:18:11 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@
 
 # define BUFF_SIZE 100
 # define MALLCHECK(x) if (!x) return (-1);
-# define IS_SPACE(x) (x == ' ' || x == '\t' || x == '\r' ||\
-	x == '\v' || x == '\f')
+# define IS_SPACE(x) (x == ' ' || x == '\t' || x == '\r' || x == '\f')
 
 void				ft_putchar(char c);
 void				ft_putstr(char const *str);

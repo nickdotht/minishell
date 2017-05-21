@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 15:41:15 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/19 21:49:08 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/20 20:29:53 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 ** @param		pos		The position at which to start printing
 ** @return		N/A
 */
+
 static void		echo_out(char **str, int pos)
 {
 	int		starts_with;
@@ -46,6 +47,7 @@ static void		echo_out(char **str, int pos)
 ** @param		args		The arguments to pass to echo
 ** @return		1 on completion
 */
+
 int				echo_builtin(char **args)
 {
 	int		i;
@@ -67,6 +69,6 @@ int				echo_builtin(char **args)
 		echo_out(args, i);
 		if (!args[i + 1] && !n_flag)
 			ft_putchar('\n');
-  	}
+	}
 	return (1);
 }

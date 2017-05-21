@@ -6,64 +6,11 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 04:17:47 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/20 00:37:57 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/21 01:04:34 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-** Returns the length of the parent shell environment variable
-**
-** @param	envv	The parent shell environment variable
-** @return	The length of envv
-*/
-int		envv_len(char **envv)
-{
-	int		i;
-	int		count;
-
-	i = -1;
-	count = 0;
-	while (envv[++i])
-		count++;
-	return (count);
-}
-
-/*
-** Makes a copy of the environment variable of the parent shell into the
-** global variable g_envv
-** NOTE: I'm using a global variable so I can be able to free the memory once
-** the program gets killed
-**
-** @param	envv	The parent shell environment variable
-** @return	N/A
-*/
-void	init_envv(char **envv)
-{
-	int		i;
-
-	g_envv = (char **)ft_memalloc(sizeof(char *) * (envv_len(envv) + 1));
-	i = -1;
-	while (envv[++i])
-	{
-		if (!(g_envv[i] = ft_strdup(envv[i])))
-			exit(1);
-	}
-}
-
-/*
-** Kills the shell gracefully
-**
-** @param		N/A
-** @return		N/A
-*/
-void	exit_shell(void)
-{
-	ft_freestrarr(g_envv);
-	write(1, "\n", 1);
-	exit(0);
-}
 
 /*
 ** Parses a string to convert variables to their value then returns the parsed
@@ -72,7 +19,8 @@ void	exit_shell(void)
 ** @param		str		The input string to parse
 ** @param		pos		The position from which to start in the string
 */
-char	*parse_env_var(char *str, int pos)
+
+static char		*parse_env_var(char *str, int pos)
 {
 	char	*value;
 	char	*key;
@@ -82,7 +30,7 @@ char	*parse_env_var(char *str, int pos)
 	while (str[pos] && !IS_SPACE(str[pos]))
 	{
 		c = str[pos];
-		key = ft_strjoinch(key, c);
+		key = ft_strjoinchcl(key, c);
 		pos++;
 	}
 	if (!(value = get_env_var(key)))
@@ -102,7 +50,8 @@ char	*parse_env_var(char *str, int pos)
 ** @param		input		The input string
 ** @return		The parsed string
 */
-char	*parse_input(char *input)
+
+static char		*parse_input(char *input)
 {
 	int		i;
 	char	*new;
@@ -118,7 +67,7 @@ char	*parse_input(char *input)
 				input[i + 1] != '$')
 				i++;
 		}
-		else if (((input[i - 1] && IS_SPACE(input[i - 1])) || i == 0) &&
+		else if (((i != 0 && IS_SPACE(input[i - 1])) || i == 0) &&
 			input[i] == '~')
 		{
 			new = ft_strjoincl(new, parse_home_path(input + i, 1), 1);
@@ -140,6 +89,7 @@ char	*parse_input(char *input)
 ** @param	input	The address of the variable to fill with the parsed input
 ** @return	N/A
 */
+
 static void		get_input(char **input)
 {
 	int		ret;
@@ -167,33 +117,62 @@ static void		get_input(char **input)
 }
 
 /*
+** Takes care of multiple commands in the input
+**
+** @param		commands	The list of commands to execute
+** @return		-1 if there was an interruption from one of the commands
+**				or 0/1 if not
+*/
+
+int				exec_commands(char **commands)
+{
+	int		i;
+	int		ret;
+	char	**command;
+
+	i = -1;
+	ret = 0;
+	while (commands[++i])
+	{
+		command = ft_strsplitall(commands[i]);
+		ret = exec_command(command);
+		ft_freestrarr(command);
+		if (ret == -1)
+			break ;
+	}
+	return (ret);
+}
+
+/*
 ** Initializes minishell
 **
 ** @param	ac		argument counts
 ** @param	av		argument variables
 ** @param	envv	environment variables
-** @return	0
+** @return	0 on completion
 */
-int		main(int ac, char **av, char **envv) {
+
+int				main(int ac, char **av, char **envv)
+{
 	char	*input;
 	int		ret;
-	char	**command;
+	char	**commands;
 
-	(void)ac;
-	(void)av;
-	init_envv(envv);
+	init_envv(ac, av, envv);
 	while (1)
 	{
 		display_prompt_msg();
 		signal(SIGINT, signal_handler);
 		get_input(&input);
 		if (ft_isemptystr(input, 1))
+		{
+			free(input);
 			continue ;
-		command = ft_strsplitall(input);
+		}
+		commands = ft_strsplit(input, ';');
 		free(input);
-		input = NULL;
-		ret = exec_command(command);
-		ft_freestrarr(command);
+		ret = exec_commands(commands);
+		ft_freestrarr(commands);
 		if (ret == -1)
 			break ;
 	}
