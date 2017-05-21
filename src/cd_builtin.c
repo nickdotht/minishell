@@ -6,7 +6,7 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 15:56:23 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/21 15:07:15 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/21 15:10:32 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void		print_pth(char *path)
 ** Changes the working directoy and updates the environment variable
 ** accordingly while handling errors
 ** NOTE: I was not allowed to use errno/strerror to handle errors for this
-** project. 
+** project.
 ** TODO: I should be changing the value of PWD too but I was getting
 ** some memory leaks for some reason. I will fix that later.
 **
