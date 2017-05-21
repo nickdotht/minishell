@@ -6,13 +6,12 @@
 /*   By: jrameau <jrameau@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/24 17:40:04 by jrameau           #+#    #+#             */
-/*   Updated: 2017/05/21 01:04:04 by jrameau          ###   ########.fr       */
+/*   Updated: 2017/05/21 15:04:50 by jrameau          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-# include <stdio.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <sys/wait.h>
@@ -20,7 +19,6 @@
 # include <stdlib.h>
 # include <signal.h>
 # include <dirent.h>
-# include <errno.h>
 # include "libft.h"
 
 # define IS_QUOTE(x) (x == '"' || x == '\'')
