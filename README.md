@@ -39,6 +39,7 @@ After building the source, run `./minishell` from the project root.
 ### Mandatory
 
 - Can only use C
+- Must respect the school imposed coding style ([The Norme][norme-pdf])
 - No memory leaks
 - Implement a series of builtins: `echo`, `cd`, `setenv`, `unsetenv`, `env`, `exit`
 - Manage the errors without using `errno`, by displaying a message adapted
@@ -79,3 +80,4 @@ Enjoy!
 [1]: https://github.com/R4meau/minishell/blob/master/minishell.en.pdf
 [quick-demo]: https://raw.githubusercontent.com/R4meau/minishell/master/minishell-quick-demo.gif?token=ADzLiR-sTesle5g6_4CQnHz4RFe69TgDks5ZK6oGwA%3D%3D
 [libft-url]: https://github.com/R4meau/libft
+[norme-pdf]: https://github.com/R4meau/minishell/blob/master/norme.en.pdf
