@@ -75,6 +75,9 @@ to the error output
 - No need to mention the odd spacing in files, I'm using a tab size of 4.
 - There are probably better ways to implement it, we are limited by a set of functions at my school (just to make it harder and give us a deeper understanding of what's happening in the back), please, review the [project instructions][1] before you explain how `X` or `Y` would have been a better way to do it ;)
 
+## Sponsors
+<a href="https://app.codesponsor.io/link/Fo4iMpT8bBWXwb54Lj7DPwqL/R4meau/minishell" rel="nofollow"><img src="https://app.codesponsor.io/embed/Fo4iMpT8bBWXwb54Lj7DPwqL/R4meau/minishell.svg" style="width: 888px; height: 68px;" alt="Sponsor" /></a>
+
 Enjoy!
 
 [1]: https://github.com/R4meau/minishell/blob/master/minishell.en.pdf
